@@ -91,6 +91,8 @@ const documents = {
     types.AddProductToWishListDocument,
   "\n  mutation RemoveWishlistItemMutation($productId: String, $userId: UUID) {\n    deleteFromwishlistCollection(\n      filter: {\n        and: [{ user_id: { eq: $userId } }, { product_id: { eq: $productId } }]\n      }\n      atMost: 1\n    ) {\n      records {\n        __typename\n      }\n    }\n  }\n":
     types.RemoveWishlistItemMutationDocument,
+  "\n  query SitemapSlugsQuery {\n    collectionsCollection(\n      first: 100\n      orderBy: [{ order: DescNullsLast }, { label: AscNullsLast }]\n    ) {\n      edges {\n        node {\n          slug\n        }\n      }\n    }\n    productsCollection(first: 500, orderBy: [{ created_at: DescNullsLast }]) {\n      edges {\n        node {\n          slug\n          created_at\n        }\n      }\n    }\n  }\n":
+    types.SitemapSlugsQueryDocument,
   "\n  query AllCollectionsQuery {\n    collectionsCollection(\n      first: 50\n      orderBy: [{ order: DescNullsLast }, { label: AscNullsLast }]\n    ) {\n      edges {\n        node {\n          id\n          ...CollectionCardFragment\n        }\n      }\n    }\n  }\n":
     types.AllCollectionsQueryDocument,
   "\n  query Search(\n    $search: String\n    $lower: BigFloat\n    $upper: BigFloat\n    $collections: [String!]\n    $matchedCollectionIds: [String!]\n    $first: Int!\n    $after: Cursor\n    $orderBy: [productsOrderBy!]\n  ) {\n    productsCollection(\n      filter: {\n        and: [\n          {\n            or: [\n              { name: { ilike: $search } }\n              { slug: { ilike: $search } }\n              { description: { ilike: $search } }\n              { collection_id: { in: $matchedCollectionIds } }\n            ]\n          }\n          { price: { gt: $lower, lt: $upper } }\n          { collection_id: { in: $collections } }\n        ]\n      }\n      first: $first\n      after: $after\n      orderBy: $orderBy\n    ) {\n      edges {\n        node {\n          id\n\n          ...ProductCardFragment\n        }\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n":
@@ -353,6 +355,12 @@ export function gql(
 export function gql(
   source: "\n  mutation RemoveWishlistItemMutation($productId: String, $userId: UUID) {\n    deleteFromwishlistCollection(\n      filter: {\n        and: [{ user_id: { eq: $userId } }, { product_id: { eq: $productId } }]\n      }\n      atMost: 1\n    ) {\n      records {\n        __typename\n      }\n    }\n  }\n",
 ): (typeof documents)["\n  mutation RemoveWishlistItemMutation($productId: String, $userId: UUID) {\n    deleteFromwishlistCollection(\n      filter: {\n        and: [{ user_id: { eq: $userId } }, { product_id: { eq: $productId } }]\n      }\n      atMost: 1\n    ) {\n      records {\n        __typename\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: "\n  query SitemapSlugsQuery {\n    collectionsCollection(\n      first: 100\n      orderBy: [{ order: DescNullsLast }, { label: AscNullsLast }]\n    ) {\n      edges {\n        node {\n          slug\n        }\n      }\n    }\n    productsCollection(first: 500, orderBy: [{ created_at: DescNullsLast }]) {\n      edges {\n        node {\n          slug\n          created_at\n        }\n      }\n    }\n  }\n",
+): (typeof documents)["\n  query SitemapSlugsQuery {\n    collectionsCollection(\n      first: 100\n      orderBy: [{ order: DescNullsLast }, { label: AscNullsLast }]\n    ) {\n      edges {\n        node {\n          slug\n        }\n      }\n    }\n    productsCollection(first: 500, orderBy: [{ created_at: DescNullsLast }]) {\n      edges {\n        node {\n          slug\n          created_at\n        }\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

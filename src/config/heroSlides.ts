@@ -8,10 +8,27 @@ export type HeroSlide = {
   cta: string;
   image: string;
   imageAlt: string;
+  /** Show photo only — no title overlay (storefront / signboard slides). */
+  photoOnly?: boolean;
+  /** Tailwind object-position classes for the slide image. */
+  imageObjectClass?: string;
 };
 
 /** Homepage hero carousel — real Tamil saree model photography until Admin → Home Banner uploads. */
 export const heroSlides: HeroSlide[] = [
+  {
+    id: "storefront",
+    title: "Sri Kumaran Silks",
+    subtitle: "Wholesale & retail silk sarees — Elampillai, Salem",
+    href: "/contact",
+    cta: "Visit us",
+    image: "/images/sri-kumaran-silks-storefront-banner.png",
+    imageAlt:
+      "SRI KUMARAN SILKS storefront at Elampillai — silk saree shop entrance",
+    photoOnly: true,
+    imageObjectClass:
+      "object-cover object-[center_18%] sm:object-[center_28%] md:object-[center_32%]",
+  },
   {
     id: "festive-silk",
     title: "Festive Silk",

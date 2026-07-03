@@ -12,12 +12,12 @@ export function HomeHeroBanner() {
           className="relative block w-full max-w-full overflow-hidden rounded-2xl shadow-md aspect-[2/1] sm:aspect-[5/2] md:aspect-[21/9] md:max-h-[480px]"
         >
           <Image
-            src="/images/hero-banner.png"
-            alt="SRI KUMARAN SILKS — premium silk saree collection"
+            src="/images/sri-kumaran-silks-storefront-banner.png"
+            alt="SRI KUMARAN SILKS storefront at Elampillai — silk saree shop entrance"
             fill
             priority
             sizes="(max-width: 768px) 100vw, 1200px"
-            className="object-cover object-[center_25%] sm:object-center"
+            className="object-cover object-[center_18%] sm:object-[center_28%] md:object-[center_32%]"
           />
         </Link>
         <div className="mt-4 hidden justify-center md:flex">

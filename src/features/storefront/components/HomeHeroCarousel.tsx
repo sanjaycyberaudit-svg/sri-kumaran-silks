@@ -78,13 +78,18 @@ export function HomeHeroCarousel({ slides }: Props) {
         <CarouselContent className="ml-0">
           {activeSlides.map((slide, index) => {
             const isFirstSlide = index === 0;
+            const photoOnly = slide.photoOnly === true;
             return (
               <CarouselItem key={slide.id} className="basis-full pl-0">
                 <div className="relative aspect-[4/5] w-full sm:aspect-[16/10] md:aspect-[21/9] md:max-h-[min(72vh,520px)]">
                   <Link
                     href={slide.href}
                     className="absolute inset-0 z-[1]"
-                    aria-label={`${slide.title} — ${slide.cta}`}
+                    aria-label={
+                      photoOnly
+                        ? slide.imageAlt
+                        : `${slide.title} — ${slide.cta}`
+                    }
                   />
                   <Image
                     src={slide.image}
@@ -93,35 +98,42 @@ export function HomeHeroCarousel({ slides }: Props) {
                     priority={isFirstSlide}
                     loading={isFirstSlide ? undefined : "lazy"}
                     sizes="100vw"
-                    className="object-cover object-[center_20%] sm:object-center"
+                    className={
+                      slide.imageObjectClass ??
+                      "object-cover object-[center_20%] sm:object-center"
+                    }
                   />
-                  <div
-                    className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/35 to-black/15"
-                    aria-hidden
-                  />
+                  {!photoOnly ? (
+                    <>
+                      <div
+                        className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/35 to-black/15"
+                        aria-hidden
+                      />
 
-                  <div className="pointer-events-none absolute inset-0 z-[2] flex flex-col items-center justify-center px-6 pb-14 pt-16 text-center sm:px-10 sm:pb-16">
-                    <h2 className="font-[family-name:var(--font-hero-serif)] text-3xl font-medium tracking-wide text-white sm:text-4xl md:text-5xl">
-                      {slide.title}
-                    </h2>
-                    <div
-                      className="my-3 flex w-28 items-center gap-2 sm:my-4 sm:w-36"
-                      aria-hidden
-                    >
-                      <span className="h-px flex-1 bg-[#E8B923]/80" />
-                      <span className="text-[#E8B923]">◆</span>
-                      <span className="h-px flex-1 bg-[#E8B923]/80" />
-                    </div>
-                    <p className="max-w-md text-sm leading-relaxed text-white/90 sm:max-w-xl sm:text-base md:text-lg">
-                      {slide.subtitle}
-                    </p>
-                    <Link
-                      href={slide.href}
-                      className="pointer-events-auto relative z-[3] mt-6 inline-flex min-h-[44px] items-center justify-center rounded-full bg-gradient-to-r from-primary to-[#A82020] px-8 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white shadow-[0_12px_30px_-8px_rgba(200,40,40,0.75)] transition-all duration-300 hover:-translate-y-0.5 hover:from-[#A82020] hover:to-primary hover:shadow-[0_16px_36px_-8px_rgba(200,40,40,0.9)] sm:mt-8 sm:px-10 sm:text-sm"
-                    >
-                      {slide.cta}
-                    </Link>
-                  </div>
+                      <div className="pointer-events-none absolute inset-0 z-[2] flex flex-col items-center justify-center px-6 pb-14 pt-16 text-center sm:px-10 sm:pb-16">
+                        <h2 className="font-[family-name:var(--font-hero-serif)] text-3xl font-medium tracking-wide text-white sm:text-4xl md:text-5xl">
+                          {slide.title}
+                        </h2>
+                        <div
+                          className="my-3 flex w-28 items-center gap-2 sm:my-4 sm:w-36"
+                          aria-hidden
+                        >
+                          <span className="h-px flex-1 bg-[#E8B923]/80" />
+                          <span className="text-[#E8B923]">◆</span>
+                          <span className="h-px flex-1 bg-[#E8B923]/80" />
+                        </div>
+                        <p className="max-w-md text-sm leading-relaxed text-white/90 sm:max-w-xl sm:text-base md:text-lg">
+                          {slide.subtitle}
+                        </p>
+                        <Link
+                          href={slide.href}
+                          className="pointer-events-auto relative z-[3] mt-6 inline-flex min-h-[44px] items-center justify-center rounded-full bg-gradient-to-r from-primary to-[#A82020] px-8 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white shadow-[0_12px_30px_-8px_rgba(200,40,40,0.75)] transition-all duration-300 hover:-translate-y-0.5 hover:from-[#A82020] hover:to-primary hover:shadow-[0_16px_36px_-8px_rgba(200,40,40,0.9)] sm:mt-8 sm:px-10 sm:text-sm"
+                        >
+                          {slide.cta}
+                        </Link>
+                      </div>
+                    </>
+                  ) : null}
                 </div>
               </CarouselItem>
             );
