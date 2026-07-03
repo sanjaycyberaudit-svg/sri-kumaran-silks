@@ -1,0 +1,447 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Sri Kumaran Silks — business card: red primary, forest green, gold accents */
+    --background: 40 40% 98%;
+    --foreground: 152 61% 18%;
+
+    --card: 40 35% 99%;
+    --card-foreground: 152 61% 18%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 152 61% 18%;
+
+    --primary: 0 67% 47%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 148 28% 93%;
+    --secondary-foreground: 152 55% 22%;
+
+    --muted: 40 25% 95%;
+    --muted-foreground: 152 12% 38%;
+
+    --accent: 45 88% 92%;
+    --accent-foreground: 152 55% 20%;
+
+    --destructive: 0 75% 47%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 40 18% 88%;
+    --input: 40 18% 88%;
+    --ring: 0 67% 47%;
+
+    --radius: 0.1rem;
+    --mobile-nav-height: calc(
+      3.5rem + max(0.5rem, env(safe-area-inset-bottom, 0px))
+    );
+    --announcement-bar-height: 2.25rem;
+    --store-nav-height-mobile: 4rem;
+    --store-nav-height-desktop: 3.125rem;
+    /* Peacock emblem inset inside header (2px top + bottom); does not change nav bar height */
+    --store-emblem-clearance: 0.125rem;
+    --store-header-offset-mobile: calc(
+      var(--announcement-bar-height) + var(--store-nav-height-mobile)
+    );
+    --store-header-offset-desktop: calc(
+      var(--announcement-bar-height) + var(--store-nav-height-desktop)
+    );
+    --admin-header-height-mobile: 3.75rem;
+    --admin-header-height-desktop: 4.5rem;
+    --admin-sidebar-width: 14rem;
+  }
+
+  .dark {
+    /* Card palette — deep red night with green/gold accents */
+    --background: 152 30% 8%;
+    --foreground: 45 38% 92%;
+
+    --card: 152 28% 11%;
+    --card-foreground: 45 38% 92%;
+
+    --popover: 152 28% 11%;
+    --popover-foreground: 45 38% 92%;
+
+    --primary: 0 58% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 152 26% 18%;
+    --secondary-foreground: 45 38% 92%;
+
+    --muted: 152 22% 18%;
+    --muted-foreground: 45 14% 66%;
+
+    --accent: 45 35% 22%;
+    --accent-foreground: 45 65% 80%;
+
+    --destructive: 0 62% 42%;
+    --destructive-foreground: 45 38% 92%;
+
+    --border: 152 22% 20%;
+    --input: 152 22% 20%;
+    --ring: 0 58% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  /* display: none; <- Crashes Chrome on hover */
+  -webkit-appearance: none;
+  margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
+}
+
+::-webkit-scrollbar {
+  width: 2px;
+  height: 2px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground));
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary));
+}
+
+.admin-scroll {
+  scrollbar-width: auto;
+  scrollbar-color: hsl(var(--muted-foreground)) hsl(var(--muted));
+  scrollbar-gutter: stable both-edges;
+}
+
+.admin-scroll::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.admin-scroll::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+
+.admin-scroll::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground));
+  border-radius: 9999px;
+}
+
+.admin-scroll::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary));
+}
+
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+@keyframes whatsapp-glow {
+  0%,
+  100% {
+    box-shadow:
+      0 4px 16px rgba(37, 211, 102, 0.35),
+      0 0 0 0 rgba(37, 211, 102, 0.45);
+  }
+  50% {
+    box-shadow:
+      0 4px 20px rgba(37, 211, 102, 0.5),
+      0 0 0 10px rgba(37, 211, 102, 0);
+  }
+}
+
+.animate-whatsapp-glow {
+  animation: whatsapp-glow 2.2s ease-in-out infinite;
+}
+
+@keyframes phone-glow {
+  0%,
+  100% {
+    box-shadow:
+      0 4px 16px rgba(200, 40, 40, 0.35),
+      0 0 0 0 rgba(200, 40, 40, 0.45);
+  }
+  50% {
+    box-shadow:
+      0 4px 20px rgba(200, 40, 40, 0.5),
+      0 0 0 10px rgba(200, 40, 40, 0);
+  }
+}
+
+.animate-phone-glow {
+  animation: phone-glow 2.2s ease-in-out infinite;
+}
+
+/* Sri Kumaran Silks shop-board — gold wordmark on red card panel */
+.brand-board-lockup {
+  isolation: isolate;
+  color-scheme: light;
+  forced-color-adjust: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: geometricPrecision;
+}
+
+.brand-board-frame {
+  filter: drop-shadow(0 1px 4px rgba(42, 6, 40, 0.22));
+}
+
+.dark .brand-board-frame {
+  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.55))
+    drop-shadow(0 0 1px rgba(232, 200, 114, 0.2));
+}
+
+.brand-board-emblem-wrap {
+  display: inline-flex;
+  line-height: 0;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.18));
+}
+
+.dark .brand-board-emblem-wrap {
+  filter: drop-shadow(0 1px 6px rgba(0, 0, 0, 0.35))
+    drop-shadow(0 0 8px rgba(232, 200, 114, 0.12));
+}
+
+.brand-board-emblem {
+  display: block;
+}
+
+.brand-board-wordmark {
+  display: block;
+  height: auto;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: center;
+  /* Lift gold lettering off red panel — bright + dark edge for legibility */
+  filter: brightness(1.38) contrast(1.18) saturate(1.55)
+    drop-shadow(0 1px 0 rgba(0, 0, 0, 0.85))
+    drop-shadow(0 2px 5px rgba(0, 0, 0, 0.55))
+    drop-shadow(0 0 10px rgba(255, 215, 80, 0.28));
+}
+
+.dark .brand-board-wordmark {
+  filter: brightness(1.42) contrast(1.2) saturate(1.6)
+    drop-shadow(0 1px 0 rgba(0, 0, 0, 0.9))
+    drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6))
+    drop-shadow(0 0 12px rgba(255, 220, 90, 0.32));
+}
+
+.brand-board-location {
+  color: #e8f5e9;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+}
+
+.dark .brand-board-location {
+  color: #f1f8e9;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.65),
+    0 0 8px rgba(232, 200, 114, 0.15);
+}
+
+.brand-board-rule {
+  display: block;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #f0c020 35%,
+    #f5d878 50%,
+    #f0c020 65%,
+    transparent 100%
+  );
+}
+
+.dark .brand-board-rule {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #edd080 35%,
+    #f8e098 50%,
+    #edd080 65%,
+    transparent 100%
+  );
+}
+
+@media (max-width: 639px) {
+  .brand-board-panel--nav .brand-board-wordmark {
+    max-height: 31px !important;
+  }
+
+  .brand-board-panel--nav .brand-board-location {
+    font-size: 7.5px !important;
+  }
+
+  .brand-board-panel--nav .brand-board-frame {
+    min-width: 0;
+  }
+}
+
+@media (min-width: 640px) {
+  .brand-board-panel--nav .brand-board-wordmark {
+    max-height: 33px !important;
+  }
+
+  .brand-board-panel--nav .brand-board-location {
+    font-size: 9px !important;
+  }
+}
+
+/* Product grid thumbnails — portrait frame, top-aligned crop (see productThumbnail.ts) */
+.product-thumb-frame {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  width: 100%;
+  overflow: hidden;
+  background: hsl(var(--muted));
+}
+
+.product-thumb-image {
+  object-fit: cover;
+  object-position: top center;
+}
+
+@keyframes announcement-scroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-announcement-scroll {
+  animation: announcement-scroll 36s linear infinite;
+}
+
+.announcement-marquee-mask {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 6%,
+    black 94%,
+    transparent
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-announcement-scroll {
+    animation: none;
+  }
+
+  .animate-whatsapp-glow,
+  .animate-phone-glow {
+    animation: none;
+  }
+
+  .announcement-marquee-track {
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100% !important;
+    padding: 0 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .announcement-marquee-track .duplicate {
+    display: none;
+  }
+
+  .scroll-snap-strip__track {
+    scroll-snap-type: none;
+  }
+}
+
+/* Homepage horizontal scroll strips — Myntra/Ajio-style swipe */
+.scroll-snap-strip {
+  position: relative;
+}
+
+.scroll-snap-strip::before,
+.scroll-snap-strip::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0.5rem;
+  width: 0.75rem;
+  z-index: 2;
+  pointer-events: none;
+}
+
+@media (min-width: 640px) {
+  .scroll-snap-strip::before,
+  .scroll-snap-strip::after {
+    width: 1.25rem;
+  }
+}
+
+.scroll-snap-strip::before {
+  left: 0;
+  background: linear-gradient(to right, hsl(var(--background)), transparent);
+}
+
+.scroll-snap-strip::after {
+  right: 0;
+  background: linear-gradient(to left, hsl(var(--background)), transparent);
+}
+
+.scroll-snap-strip__track {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 0.75rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 0.35rem;
+}
+
+@media (min-width: 640px) {
+  .scroll-snap-strip__track {
+    gap: 1rem;
+    scroll-padding-inline: 1rem;
+  }
+}
+
+.scroll-snap-strip__track::-webkit-scrollbar {
+  display: none;
+}
+
+.scroll-snap-item {
+  flex: 0 0 auto;
+  min-width: 0;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  align-self: stretch;
+}
+
+@supports (view-transition-name: none) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.32s;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  ::view-transition-group(*),
+  ::view-transition-image-pair(*) {
+    animation-duration: 0.42s;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
