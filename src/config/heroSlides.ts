@@ -17,6 +17,16 @@ export type HeroSlide = {
 /** Homepage hero carousel — real Tamil saree model photography until Admin → Home Banner uploads. */
 export const heroSlides: HeroSlide[] = [
   {
+    id: "festive-silk",
+    title: "Festive Silk",
+    subtitle:
+      "Kanjivaram, soft silk, and wedding weaves — curated for every celebration",
+    href: "/collections/kanjivaram-wedding-sarees",
+    cta: "Shop now",
+    image: heroBannerImage("festiveSilk"),
+    imageAlt: "Model in Kanjivaram silk saree — SRI KUMARAN SILKS, Salem",
+  },
+  {
     id: "storefront",
     title: "Sri Kumaran Silks",
     subtitle: "Wholesale & retail silk sarees — Elampillai, Salem",
@@ -28,16 +38,6 @@ export const heroSlides: HeroSlide[] = [
     photoOnly: true,
     imageObjectClass:
       "object-cover object-[center_18%] sm:object-[center_28%] md:object-[center_32%]",
-  },
-  {
-    id: "festive-silk",
-    title: "Festive Silk",
-    subtitle:
-      "Kanjivaram, soft silk, and wedding weaves — curated for every celebration",
-    href: "/collections/kanjivaram-wedding-sarees",
-    cta: "Shop now",
-    image: heroBannerImage("festiveSilk"),
-    imageAlt: "Model in Kanjivaram silk saree — SRI KUMARAN SILKS, Salem",
   },
   {
     id: "summer-weaves",

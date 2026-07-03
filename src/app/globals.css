@@ -280,16 +280,34 @@ body {
 }
 
 @media (max-width: 639px) {
+  .brand-board-lockup--nav .brand-board-emblem-wrap {
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.12));
+  }
+
   .brand-board-panel--nav .brand-board-wordmark {
     max-height: 31px !important;
+    /* Calmer gold on small screens — less glow / glitter */
+    filter: brightness(1.1) contrast(1.06) saturate(1.12)
+      drop-shadow(0 1px 0 rgba(0, 0, 0, 0.55));
   }
 
   .brand-board-panel--nav .brand-board-location {
     font-size: 7.5px !important;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.35);
   }
 
   .brand-board-panel--nav .brand-board-frame {
     min-width: 0;
+    filter: drop-shadow(0 1px 2px rgba(42, 6, 40, 0.16));
+  }
+
+  .dark .brand-board-panel--nav .brand-board-wordmark {
+    filter: brightness(1.12) contrast(1.08) saturate(1.15)
+      drop-shadow(0 1px 0 rgba(0, 0, 0, 0.65));
+  }
+
+  .dark .brand-board-lockup--nav .brand-board-emblem-wrap {
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.28));
   }
 }
 
