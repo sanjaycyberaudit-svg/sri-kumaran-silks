@@ -30,8 +30,8 @@ const EMAIL = "";
 const GSTIN = "33BMCPV3652G1Z1";
 
 const SOCIAL = {
-  instagram: "",
-  youtube: "",
+  instagram: "https://www.instagram.com/sri_kumaran_silks_elampillai/",
+  youtube: "https://www.youtube.com/hashtag/srikumaransilkselampillai",
   facebook: "",
   whatsapp: "https://wa.me/919442946229",
 } as const;

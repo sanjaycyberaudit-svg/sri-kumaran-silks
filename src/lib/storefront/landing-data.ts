@@ -11,7 +11,7 @@ const LandingRouteQuery = gql(/* GraphQL */ `
   query LandingRouteQuery {
     products: productsCollection(
       filter: { featured: { eq: true } }
-      first: 12
+      first: 20
       orderBy: [{ created_at: DescNullsLast }]
     ) {
       edges {
