@@ -32,11 +32,23 @@ const DEFAULT_FORM: FormState = {
   lowStockThreshold: 5,
 };
 
+const MIN_LOW_STOCK = 1;
+const MAX_LOW_STOCK = 99;
+
+function clampLowStockThreshold(raw: string, fallback: number) {
+  const parsed = Number(raw.trim());
+  if (!Number.isFinite(parsed)) return fallback;
+  return Math.min(MAX_LOW_STOCK, Math.max(MIN_LOW_STOCK, Math.round(parsed)));
+}
+
 export function StockControlForm() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [form, setForm] = useState<FormState>(DEFAULT_FORM);
+  const [thresholdDraft, setThresholdDraft] = useState(
+    String(DEFAULT_FORM.lowStockThreshold),
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -55,13 +67,17 @@ export function StockControlForm() {
             DEFAULT_FORM.lowStockThreshold,
         );
         const lowStockThreshold = Number.isFinite(storedThreshold)
-          ? Math.min(99, Math.max(1, Math.round(storedThreshold)))
+          ? Math.min(
+              MAX_LOW_STOCK,
+              Math.max(MIN_LOW_STOCK, Math.round(storedThreshold)),
+            )
           : DEFAULT_FORM.lowStockThreshold;
 
         setForm({
           enabled: payload.stockControl?.isEnabled ?? DEFAULT_FORM.enabled,
           lowStockThreshold,
         });
+        setThresholdDraft(String(lowStockThreshold));
       } catch (error) {
         toast({
           title: "Could not load stock setting",
@@ -85,6 +101,13 @@ export function StockControlForm() {
   );
 
   const onSave = async () => {
+    const lowStockThreshold = clampLowStockThreshold(
+      thresholdDraft,
+      form.lowStockThreshold,
+    );
+    setForm((prev) => ({ ...prev, lowStockThreshold }));
+    setThresholdDraft(String(lowStockThreshold));
+
     setIsSaving(true);
     try {
       const res = await fetchWithTimeout("/api/admin/integrations", {
@@ -93,7 +116,7 @@ export function StockControlForm() {
         body: JSON.stringify({
           key: "stock_control",
           isEnabled: form.enabled,
-          value: { lowStockThreshold: form.lowStockThreshold },
+          value: { lowStockThreshold },
         }),
       });
 
@@ -105,7 +128,7 @@ export function StockControlForm() {
       toast({
         title: "Stock setting saved",
         description: form.enabled
-          ? `Low stock will show below ${form.lowStockThreshold}.`
+          ? `Low stock will show below ${lowStockThreshold}.`
           : "Stock control is disabled. Storefront stays as usual.",
       });
     } catch (error) {
@@ -143,17 +166,20 @@ export function StockControlForm() {
           <Label htmlFor="low-stock-threshold">Low stock threshold</Label>
           <Input
             id="low-stock-threshold"
-            type="number"
-            min={1}
-            max={99}
-            value={form.lowStockThreshold}
-            onChange={(event) => {
-              const value = Number(event.target.value);
-              if (!Number.isFinite(value)) return;
-              setForm((prev) => ({
-                ...prev,
-                lowStockThreshold: Math.min(99, Math.max(1, Math.round(value))),
-              }));
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            value={thresholdDraft}
+            onChange={(event) =>
+              setThresholdDraft(event.target.value.replace(/\D/g, ""))
+            }
+            onBlur={() => {
+              const lowStockThreshold = clampLowStockThreshold(
+                thresholdDraft,
+                form.lowStockThreshold,
+              );
+              setForm((prev) => ({ ...prev, lowStockThreshold }));
+              setThresholdDraft(String(lowStockThreshold));
             }}
           />
           <p className="text-xs text-muted-foreground">

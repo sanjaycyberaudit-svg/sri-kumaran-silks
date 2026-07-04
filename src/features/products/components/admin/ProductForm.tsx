@@ -949,29 +949,64 @@ function ProductFrom({ product }: ProductsFormProps) {
             </FormItem>
           ) : null}
 
-          <FormItem>
-            <FormLabel className="text-sm">Stock</FormLabel>
-            <FormControl>
-              <Input
-                type="number"
-                min={0}
-                defaultValue={product?.stock ?? undefined}
-                aria-invalid={!!form.formState.errors.stock}
-                placeholder={
-                  stockControl.enabled
-                    ? "Stock quantity (default 1 for new product)"
-                    : "Stock quantity"
-                }
-                {...register("stock", { valueAsNumber: true })}
-              />
-            </FormControl>
-            <FormDescription>
-              {stockControl.enabled
-                ? `Low-stock notice appears below ${stockControl.lowStockThreshold}.`
-                : "Stock control is disabled; storefront behavior remains unchanged."}
-            </FormDescription>
-            <FormMessage />
-          </FormItem>
+          <FormField
+            control={control}
+            name="stock"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm">Stock</FormLabel>
+                <FormControl>
+                  <Input
+                    type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    aria-invalid={!!form.formState.errors.stock}
+                    placeholder={
+                      stockControl.enabled
+                        ? "Stock quantity (default 1 for new product)"
+                        : "Stock quantity"
+                    }
+                    value={
+                      field.value === undefined ||
+                      field.value === null ||
+                      Number.isNaN(field.value)
+                        ? ""
+                        : String(field.value)
+                    }
+                    onChange={(event) => {
+                      const digits = event.target.value.replace(/\D/g, "");
+                      if (digits === "") {
+                        field.onChange(undefined);
+                        return;
+                      }
+                      field.onChange(Number(digits));
+                    }}
+                    onBlur={() => {
+                      const current = field.value;
+                      if (
+                        current === undefined ||
+                        current === null ||
+                        Number.isNaN(current)
+                      ) {
+                        field.onChange(stockControl.enabled ? 1 : 0);
+                      } else {
+                        field.onChange(
+                          Math.min(99999, Math.max(0, Math.round(current))),
+                        );
+                      }
+                      field.onBlur();
+                    }}
+                  />
+                </FormControl>
+                <FormDescription>
+                  {stockControl.enabled
+                    ? `Low-stock notice appears below ${stockControl.lowStockThreshold}.`
+                    : "Stock control is disabled; storefront behavior remains unchanged."}
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <FormItem>
             <FormLabel className="text-sm">Enable Size</FormLabel>

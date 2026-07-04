@@ -32,11 +32,23 @@ const DEFAULT_FORM: FormState = {
   threshold: 9,
 };
 
+const MIN_THRESHOLD = 2;
+const MAX_THRESHOLD = 99;
+
+function clampBulkThreshold(raw: string, fallback: number) {
+  const parsed = Number(raw.trim());
+  if (!Number.isFinite(parsed)) return fallback;
+  return Math.min(MAX_THRESHOLD, Math.max(MIN_THRESHOLD, Math.round(parsed)));
+}
+
 export function BulkOrderGuardForm() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [form, setForm] = useState<FormState>(DEFAULT_FORM);
+  const [thresholdDraft, setThresholdDraft] = useState(
+    String(DEFAULT_FORM.threshold),
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -54,13 +66,14 @@ export function BulkOrderGuardForm() {
           payload.bulkOrderGuard?.value?.threshold ?? DEFAULT_FORM.threshold,
         );
         const threshold = Number.isFinite(storedThreshold)
-          ? Math.min(99, Math.max(2, Math.round(storedThreshold)))
+          ? Math.min(MAX_THRESHOLD, Math.max(MIN_THRESHOLD, Math.round(storedThreshold)))
           : DEFAULT_FORM.threshold;
 
         setForm({
           enabled: payload.bulkOrderGuard?.isEnabled ?? true,
           threshold,
         });
+        setThresholdDraft(String(threshold));
       } catch (error) {
         toast({
           title: "Could not load setting",
@@ -84,6 +97,10 @@ export function BulkOrderGuardForm() {
   );
 
   const onSave = async () => {
+    const threshold = clampBulkThreshold(thresholdDraft, form.threshold);
+    setForm((prev) => ({ ...prev, threshold }));
+    setThresholdDraft(String(threshold));
+
     setIsSaving(true);
     try {
       const res = await fetchWithTimeout("/api/admin/integrations", {
@@ -92,7 +109,7 @@ export function BulkOrderGuardForm() {
         body: JSON.stringify({
           key: "bulk_order_guard",
           isEnabled: form.enabled,
-          value: { threshold: form.threshold },
+          value: { threshold },
         }),
       });
 
@@ -103,7 +120,7 @@ export function BulkOrderGuardForm() {
 
       toast({
         title: "Bulk order setting saved",
-        description: `Guard is ${form.enabled ? "enabled" : "disabled"} at ${form.threshold}+ per product line.`,
+        description: `Guard is ${form.enabled ? "enabled" : "disabled"} at ${threshold}+ per product line.`,
       });
     } catch (error) {
       toast({
@@ -140,17 +157,20 @@ export function BulkOrderGuardForm() {
           <Label htmlFor="bulk-threshold">Threshold quantity</Label>
           <Input
             id="bulk-threshold"
-            type="number"
-            min={2}
-            max={99}
-            value={form.threshold}
-            onChange={(e) => {
-              const value = Number(e.target.value);
-              if (!Number.isFinite(value)) return;
-              setForm((prev) => ({
-                ...prev,
-                threshold: Math.min(99, Math.max(2, Math.round(value))),
-              }));
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            value={thresholdDraft}
+            onChange={(e) =>
+              setThresholdDraft(e.target.value.replace(/\D/g, ""))
+            }
+            onBlur={() => {
+              const threshold = clampBulkThreshold(
+                thresholdDraft,
+                form.threshold,
+              );
+              setForm((prev) => ({ ...prev, threshold }));
+              setThresholdDraft(String(threshold));
             }}
           />
           <p className="text-xs text-muted-foreground">
