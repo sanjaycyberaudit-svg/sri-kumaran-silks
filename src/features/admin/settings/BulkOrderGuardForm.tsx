@@ -66,7 +66,10 @@ export function BulkOrderGuardForm() {
           payload.bulkOrderGuard?.value?.threshold ?? DEFAULT_FORM.threshold,
         );
         const threshold = Number.isFinite(storedThreshold)
-          ? Math.min(MAX_THRESHOLD, Math.max(MIN_THRESHOLD, Math.round(storedThreshold)))
+          ? Math.min(
+              MAX_THRESHOLD,
+              Math.max(MIN_THRESHOLD, Math.round(storedThreshold)),
+            )
           : DEFAULT_FORM.threshold;
 
         setForm({
